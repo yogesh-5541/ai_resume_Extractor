@@ -1,0 +1,18 @@
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Logs and Debug outputs
+*.log
+build_*.txt
+run_*.txt
+mvn_*.txt
+compile_*.txt
+out.txt
+boot*.txt
+chunk*.txt

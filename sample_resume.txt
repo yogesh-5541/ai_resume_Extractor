@@ -1,0 +1,20 @@
+John Doe
+Software Engineer
+Email: john.doe@example.com
+Phone: (555) 123-4567
+
+Summary
+Highly skilled Software Engineer with 5+ years of experience in full-stack development.
+Proficient in Java, Spring Boot, React, and AWS.
+
+Experience
+Senior Developer at Tech Nova (2020 - Present)
+- Designed and implemented microservices using Spring Boot.
+- Built responsive UI components with React and Tailwind CSS.
+- Optimized database queries, reducing response times by 30%.
+
+Education
+B.Sc. in Computer Science - University of State (2016-2020)
+
+Skills
+Java, Python, JavaScript, TypeScript, React, Spring Boot, SQL, Docker, Kubernetes.
