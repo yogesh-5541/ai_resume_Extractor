@@ -18,6 +18,12 @@ public class Resume {
     private String skills;
     private Double experienceYears;
     private String status;
+    private String education;
+    private String currentJobTitle;
+    
+    @Column(columnDefinition = "TEXT")
+    private String summary;
+
     private LocalDateTime uploadedAt = LocalDateTime.now();
 
     public Resume() {}
@@ -45,6 +51,15 @@ public class Resume {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getEducation() { return education; }
+    public void setEducation(String education) { this.education = education; }
+
+    public String getCurrentJobTitle() { return currentJobTitle; }
+    public void setCurrentJobTitle(String currentJobTitle) { this.currentJobTitle = currentJobTitle; }
+
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
 
     public LocalDateTime getUploadedAt() { return uploadedAt; }
     public void setUploadedAt(LocalDateTime uploadedAt) { this.uploadedAt = uploadedAt; }

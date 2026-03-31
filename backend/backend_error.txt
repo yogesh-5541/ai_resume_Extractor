@@ -1,0 +1,455 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.airesumeinsight:backend >---------------------
+[INFO] Building AiResumeInsight 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ backend ---
+[INFO] Deleting C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend\target
+[INFO] 
+[INFO] >>> spring-boot:3.3.5:run (default-cli) > test-compile @ backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ backend ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 15 source files with javac [debug parameters release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ backend ---
+[INFO] skip non existing resourceDirectory C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ backend ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 17] to target\test-classes
+[INFO] 
+[INFO] <<< spring-boot:3.3.5:run (default-cli) < test-compile @ backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.3.5:run (default-cli) @ backend ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2026-03-31T15:42:41.140+05:30  INFO 21696 --- [AiResumeInsight] [           main] c.a.AiResumeInsightApplication           : Starting AiResumeInsightApplication using Java 25 with PID 21696 (C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend\target\classes started by MSI1 in C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend)
+2026-03-31T15:42:41.159+05:30  INFO 21696 --- [AiResumeInsight] [           main] c.a.AiResumeInsightApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-03-31T15:42:42.165+05:30  INFO 21696 --- [AiResumeInsight] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-31T15:42:42.405+05:30  INFO 21696 --- [AiResumeInsight] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 220 ms. Found 2 JPA repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (file:/C:/Users/MSI1/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.31/tomcat-embed-core-10.1.31.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+2026-03-31T15:42:43.402+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-03-31T15:42:43.440+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-31T15:42:43.440+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.31]
+2026-03-31T15:42:43.638+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-03-31T15:42:43.639+05:30  INFO 21696 --- [AiResumeInsight] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2392 ms
+2026-03-31T15:42:43.892+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-31T15:42:44.035+05:30  INFO 21696 --- [AiResumeInsight] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-31T15:42:44.084+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-31T15:42:44.537+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-31T15:42:44.575+05:30  INFO 21696 --- [AiResumeInsight] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-31T15:42:44.893+05:30  INFO 21696 --- [AiResumeInsight] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@34cf0e80
+2026-03-31T15:42:44.895+05:30  INFO 21696 --- [AiResumeInsight] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-31T15:42:45.004+05:30  WARN 21696 --- [AiResumeInsight] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-31T15:42:46.495+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: alter table job_description modify column description LONGTEXT
+Hibernate: alter table job_description modify column required_skills TEXT
+Hibernate: alter table resume add column current_job_title varchar(255)
+Hibernate: alter table resume add column education varchar(255)
+Hibernate: alter table resume modify column original_text LONGTEXT
+Hibernate: alter table resume add column summary TEXT
+2026-03-31T15:42:46.757+05:30  INFO 21696 --- [AiResumeInsight] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-31T15:42:48.008+05:30  WARN 21696 --- [AiResumeInsight] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-31T15:42:48.470+05:30  INFO 21696 --- [AiResumeInsight] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-03-31T15:42:48.485+05:30  INFO 21696 --- [AiResumeInsight] [           main] c.a.AiResumeInsightApplication           : Started AiResumeInsightApplication in 7.888 seconds (process running for 8.466)
+2026-03-31T15:43:51.195+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-31T15:43:51.196+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-31T15:43:51.197+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-03-31T15:43:52.949+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-1] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+  "name": "DONNA STROUPE",
+  "email": "hello@reallygreatsite.com",
+  "phone": "123-456-7890",
+  "skills": [
+    "Graphic Design",
+    "Web Development",
+    "Microsoft Office",
+    "3d Animation",
+    "Public Relation",
+    "Office Management",
+    "Social Marketing",
+    "Problem Solving"
+  ],
+  "experienceYears": 2,
+  "education": "Bachelor of Design - The Green University / Mexico (2016-2018)",
+  "currentJobTitle": "Graphic Designer",
+  "summary": "Experienced graphic designer with a track record in developing web design and graphic design solutions tailored to client needs."
+}
+CLEAN JSON: {
+  "name": "DONNA STROUPE",
+  "email": "hello@reallygreatsite.com",
+  "phone": "123-456-7890",
+  "skills": [
+    "Graphic Design",
+    "Web Development",
+    "Microsoft Office",
+    "3d Animation",
+    "Public Relation",
+    "Office Management",
+    "Social Marketing",
+    "Problem Solving"
+  ],
+  "experienceYears": 2,
+  "education": "Bachelor of Design - The Green University / Mexico (2016-2018)",
+  "currentJobTitle": "Graphic Designer",
+  "summary": "Experienced graphic designer with a track record in developing web design and graphic design solutions tailored to client needs."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: delete from resume where id=?
+Hibernate: delete from resume where id=?
+Hibernate: delete from resume where id=?
+2026-03-31T15:50:12.482+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-1] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+"name": "OLIVIA WILSON",
+"email": "hello@reallygreatsite.com",
+"phone": "+123-456-7890",
+"skills": [
+"Project Management",
+"Public Relations",
+"Teamwork",
+"Time Management",
+"Leadership"
+],
+"experienceYears": 3,
+"education": "Master of Strategic Marketing - Wardiere University",
+"currentJobTitle": "Marketing Manager",
+"summary": "Results-oriented Marketing Manager with over [X] years of experience driving brand growth, market expansion, and revenue increase through innovative marketing strategies and data-driven decision-making."
+}
+CLEAN JSON: {
+"name": "OLIVIA WILSON",
+"email": "hello@reallygreatsite.com",
+"phone": "+123-456-7890",
+"skills": [
+"Project Management",
+"Public Relations",
+"Teamwork",
+"Time Management",
+"Leadership"
+],
+"experienceYears": 3,
+"education": "Master of Strategic Marketing - Wardiere University",
+"currentJobTitle": "Marketing Manager",
+"summary": "Results-oriented Marketing Manager with over [X] years of experience driving brand growth, market expansion, and revenue increase through innovative marketing strategies and data-driven decision-making."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+2026-03-31T15:50:39.560+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-5] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+  "name": "Richard Sanchez",
+  "email": "hello@reallygreatsite.com",
+  "phone": "+123-456-7890",
+  "skills": [
+    "Project Management",
+    "Public Relations",
+    "Teamwork",
+    "Time Management",
+    "Leadership",
+    "Effective Communication",
+    "Critical Thinking",
+    "English (Fluent)",
+    "French (Fluent)",
+    "German (Basics)",
+    "Spanish (Intermediate)"
+  ],
+  "experienceYears": 5,
+  "education": "Master of Business Management - Wardiere University, Bachelor of Business - Wardiere University",
+  "currentJobTitle": "Marketing Manager & Specialist",
+  "summary": "Experienced marketing manager with a track record of developing and executing comprehensive marketing strategies and campaigns."
+}
+CLEAN JSON: {
+  "name": "Richard Sanchez",
+  "email": "hello@reallygreatsite.com",
+  "phone": "+123-456-7890",
+  "skills": [
+    "Project Management",
+    "Public Relations",
+    "Teamwork",
+    "Time Management",
+    "Leadership",
+    "Effective Communication",
+    "Critical Thinking",
+    "English (Fluent)",
+    "French (Fluent)",
+    "German (Basics)",
+    "Spanish (Intermediate)"
+  ],
+  "experienceYears": 5,
+  "education": "Master of Business Management - Wardiere University, Bachelor of Business - Wardiere University",
+  "currentJobTitle": "Marketing Manager & Specialist",
+  "summary": "Experienced marketing manager with a track record of developing and executing comprehensive marketing strategies and campaigns."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+2026-03-31T15:51:02.616+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-3] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+  "name": "DONNA STROUPE",
+  "email": "hello@reallygreatsite.com",
+  "phone": "123-456-7890",
+  "skills": [
+    "Graphic Design",
+    "Web Development",
+    "Microsoft Office",
+    "3d Animation",
+    "Public Relation",
+    "Office Management",
+    "Social Marketing",
+    "Problem Solving"
+  ],
+  "experienceYears": 2,
+  "education": "Bachelor of Design - The Green University / Mexico (2016-2018)",
+  "currentJobTitle": "Graphic Designer",
+  "summary": "Experienced graphic designer with a track record in developing web design and graphic design solutions tailored to client needs."
+}
+CLEAN JSON: {
+  "name": "DONNA STROUPE",
+  "email": "hello@reallygreatsite.com",
+  "phone": "123-456-7890",
+  "skills": [
+    "Graphic Design",
+    "Web Development",
+    "Microsoft Office",
+    "3d Animation",
+    "Public Relation",
+    "Office Management",
+    "Social Marketing",
+    "Problem Solving"
+  ],
+  "experienceYears": 2,
+  "education": "Bachelor of Design - The Green University / Mexico (2016-2018)",
+  "currentJobTitle": "Graphic Designer",
+  "summary": "Experienced graphic designer with a track record in developing web design and graphic design solutions tailored to client needs."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+2026-03-31T15:51:22.678+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-4] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+  "name": "Abigail Stanford",
+  "email": "hello@reallygreatsite.com",
+  "phone": "123-456-7890",
+  "skills": [
+    "Graphic Design",
+    "Illustration",
+    "Photography",
+    "Motion Graphics",
+    "Video Production",
+    "Layouting"
+  ],
+  "experienceYears": 5,
+  "education": "Bachelor of Fine Arts in Graphic Design - Southwest University, Certificate Course in Graphic Design and Illustration - Southwest Design Academy",
+  "currentJobTitle": "Senior Graphic Designer",
+  "summary": "Creative and detail-oriented graphic designer with over five years of experience specializing in brand identity, digital, print, and illustration."
+}
+CLEAN JSON: {
+  "name": "Abigail Stanford",
+  "email": "hello@reallygreatsite.com",
+  "phone": "123-456-7890",
+  "skills": [
+    "Graphic Design",
+    "Illustration",
+    "Photography",
+    "Motion Graphics",
+    "Video Production",
+    "Layouting"
+  ],
+  "experienceYears": 5,
+  "education": "Bachelor of Fine Arts in Graphic Design - Southwest University, Certificate Course in Graphic Design and Illustration - Southwest Design Academy",
+  "currentJobTitle": "Senior Graphic Designer",
+  "summary": "Creative and detail-oriented graphic designer with over five years of experience specializing in brand identity, digital, print, and illustration."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+2026-03-31T15:51:41.530+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-2] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+  "name": "MORGAN MAXWELL",
+  "email": "hello@reallygreatsite.com",
+  "phone": "+123-456-7890",
+  "skills": [
+    "Leadership",
+    "Management Skills",
+    "Time Management",
+    "Communication Skills",
+    "Critical Thinking",
+    "Auditing",
+    "Financial Accounting",
+    "Financial Reporting",
+    "Expense Reporting",
+    "Managerial Accounting"
+  ],
+  "experienceYears": 5,
+  "education": "Borcelle University | 2026-2030",
+  "currentJobTitle": "Senior Accountant",
+  "summary": "Experienced professional with a strong background in accounting and leadership."
+}
+CLEAN JSON: {
+  "name": "MORGAN MAXWELL",
+  "email": "hello@reallygreatsite.com",
+  "phone": "+123-456-7890",
+  "skills": [
+    "Leadership",
+    "Management Skills",
+    "Time Management",
+    "Communication Skills",
+    "Critical Thinking",
+    "Auditing",
+    "Financial Accounting",
+    "Financial Reporting",
+    "Expense Reporting",
+    "Managerial Accounting"
+  ],
+  "experienceYears": 5,
+  "education": "Borcelle University | 2026-2030",
+  "currentJobTitle": "Senior Accountant",
+  "summary": "Experienced professional with a strong background in accounting and leadership."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+2026-03-31T15:52:00.638+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-7] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+    "name": "EMAA WARNER",
+    "email": "hello@reallygreatsite.com",
+    "phone": "123-456-7890",
+    "skills": [
+        "Client Acquisition",
+        "B2B Sales",
+        "Negotiation",
+        "Relationship Management",
+        "Market Analysis",
+        "Sales Strategies",
+        "Negotiation Skills",
+        "Problem-Solving",
+        "Time Management",
+        "Presentation Skills",
+        "Networking",
+        "Market Research"
+    ],
+    "experienceYears": 3,
+    "education": "Bachelor of Business Management - Wardiere University",
+    "currentJobTitle": "Accounting Executive",
+    "summary": "Highly motivated and detail-oriented Accounting Professional with strong experience in financial reporting, bookkeeping, and data analysis."
+}
+CLEAN JSON: {
+    "name": "EMAA WARNER",
+    "email": "hello@reallygreatsite.com",
+    "phone": "123-456-7890",
+    "skills": [
+        "Client Acquisition",
+        "B2B Sales",
+        "Negotiation",
+        "Relationship Management",
+        "Market Analysis",
+        "Sales Strategies",
+        "Negotiation Skills",
+        "Problem-Solving",
+        "Time Management",
+        "Presentation Skills",
+        "Networking",
+        "Market Research"
+    ],
+    "experienceYears": 3,
+    "education": "Bachelor of Business Management - Wardiere University",
+    "currentJobTitle": "Accounting Executive",
+    "summary": "Highly motivated and detail-oriented Accounting Professional with strong experience in financial reporting, bookkeeping, and data analysis."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+2026-03-31T15:52:26.020+05:30  INFO 21696 --- [AiResumeInsight] [nio-8080-exec-6] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+RAW AI RESPONSE: {
+"name": "LAURICE MORETTI",
+"email": "hello@reallygreatsite.com",
+"phone": "+123-456-7890",
+"skills": ["Project Management", "System Optimization", "Risk Management and Mitigation", "Vendor Relations"],
+"experienceYears": 10,
+"education": "Master of Systems Design and Management - North State University, Bachelor of Science in Computer Engineering - South City College",
+"currentJobTitle": "SYSTEMS DESIGNER",
+"summary": "Committed and innovative systems design professional with 10 years of experience creating, implementing, and optimizing complex systems."
+}
+CLEAN JSON: {
+"name": "LAURICE MORETTI",
+"email": "hello@reallygreatsite.com",
+"phone": "+123-456-7890",
+"skills": ["Project Management", "System Optimization", "Risk Management and Mitigation", "Vendor Relations"],
+"experienceYears": 10,
+"education": "Master of Systems Design and Management - North State University, Bachelor of Science in Computer Engineering - South City College",
+"currentJobTitle": "SYSTEMS DESIGNER",
+"summary": "Committed and innovative systems design professional with 10 years of experience creating, implementing, and optimizing complex systems."
+}
+Hibernate: insert into resume (applicant_name,current_job_title,education,email,experience_years,original_text,phone,skills,status,summary,uploaded_at) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.current_job_title,r1_0.education,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.summary,r1_0.uploaded_at from resume r1_0
+Hibernate: insert into job_description (description,min_experience,required_skills,title) values (?,?,?,?)
+2026-03-31T15:56:32.501+05:30 ERROR 21696 --- [AiResumeInsight] [nio-8080-exec-7] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.IllegalArgumentException: Name for argument of type [java.lang.Long] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.] with root cause
+
+java.lang.IllegalArgumentException: Name for argument of type [java.lang.Long] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.updateNamedValueInfo(AbstractNamedValueMethodArgumentResolver.java:186) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.getNamedValueInfo(AbstractNamedValueMethodArgumentResolver.java:161) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:107) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:178) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-embed-core-10.1.31.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.14.jar:6.1.14]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.31.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.14.jar:6.1.14]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.31.jar:10.1.31]
+	at java.base/java.lang.Thread.run(Thread.java:1474) ~[na:na]
+

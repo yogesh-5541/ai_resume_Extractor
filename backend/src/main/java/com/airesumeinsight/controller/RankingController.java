@@ -19,7 +19,7 @@ public class RankingController {
     }
 
     @GetMapping("/rank/{jobId}")
-    public ResponseEntity<List<RankedCandidate>> rankCandidatesForJob(@PathVariable Long jobId) {
+    public ResponseEntity<List<RankedCandidate>> rankCandidatesForJob(@PathVariable("jobId") Long jobId) {
         try {
             List<RankedCandidate> rankedCandidates = rankingService.rankCandidatesForJob(jobId);
             return ResponseEntity.ok(rankedCandidates);

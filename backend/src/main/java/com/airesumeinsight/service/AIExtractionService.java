@@ -38,9 +38,9 @@ public class AIExtractionService {
     }
 
     public Candidate extractStructuredData(String resumeText) {
-        // Truncate very long resumes to avoid token limits
-        String truncated = resumeText != null && resumeText.length() > 3000
-                ? resumeText.substring(0, 3000)
+        // Truncate very long resumes to avoid context limits
+        String truncated = resumeText != null && resumeText.length() > 10000
+                ? resumeText.substring(0, 10000)
                 : resumeText;
 
         String prompt = """
@@ -50,19 +50,24 @@ public class AIExtractionService {
                 John Smith
                 Software Engineer
                 Email: john@example.com | Phone: 555-1234
-                Skills: Java, Python, Docker
+                Skills: Java, Python, Docker, Negotiation, B2B Sales
                 Experience: 5 years
+                Education: B.Sc. in Computer Science - University of State
+                Summary: Experienced software engineer with a track record.
 
                 EXAMPLE OUTPUT:
-                {"name":"John Smith","email":"john@example.com","phone":"555-1234","skills":["Java","Python","Docker"],"experienceYears":5}
+                {"name":"John Smith","email":"john@example.com","phone":"555-1234","skills":["Java","Python","Docker","Negotiation","B2B Sales"],"experienceYears":5,"education":"B.Sc. in Computer Science - University of State","currentJobTitle":"Software Engineer","summary":"Experienced software engineer with a track record."}
 
                 RULES:
                 - Return ONLY the JSON object, no explanation, no markdown, no code block
                 - name: full name of the candidate (usually the first line of the resume)
                 - email: email address (look for @ symbol)
                 - phone: phone number with digits
-                - skills: array of technical or professional skills mentioned
+                - skills: array of ALL technical, soft, business, or professional skills mentioned. EXHAUSTIVE LIST - DO NOT TRUNCATE OR OMIT ANY SKILLS.
                 - experienceYears: total years of work experience as a number (0 if not mentioned)
+                - education: highest degree and institution name (null if not found)
+                - currentJobTitle: the candidate's current or most recent job title (null if not found)
+                - summary: a short 1-2 sentence professional summary of the candidate's profile (generate one if not explicitly written)
                 - NEVER return null for name if any name-like text exists at the top of the resume
 
                 RESUME:
@@ -112,6 +117,18 @@ public class AIExtractionService {
                 } catch (Exception ignored) {}
             }
             candidate.setExperienceYears(expYears);
+
+            // Education
+            String aiEducation = safeGetText(rootNode, "education");
+            candidate.setEducation(aiEducation);
+
+            // Job Title
+            String aiJobTitle = safeGetText(rootNode, "currentJobTitle");
+            candidate.setCurrentJobTitle(aiJobTitle);
+
+            // Summary
+            String aiSummary = safeGetText(rootNode, "summary");
+            candidate.setSummary(aiSummary);
 
             // --- Apply fallbacks for any null fields ---
             applyFallbacks(candidate, resumeText);
@@ -214,9 +231,13 @@ public class AIExtractionService {
     private List<String> fallbackSkillsExtraction(String text) {
         List<String> found = new ArrayList<>();
         if (text == null || text.isBlank()) return found;
-        String lower = text.toLowerCase();
-        for (String skill : KNOWN_SKILLS)
-            if (lower.contains(skill.toLowerCase())) found.add(skill);
+        for (String skill : KNOWN_SKILLS) {
+            String patternString = "\\b" + Pattern.quote(skill) + "\\b";
+            Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+            if (pattern.matcher(text).find()) {
+                found.add(skill);
+            }
+        }
         return found;
     }
 }

@@ -1,0 +1,81 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.airesumeinsight:backend >---------------------
+[INFO] Building AiResumeInsight 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ backend ---
+[INFO] Deleting C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend\target
+[INFO] 
+[INFO] >>> spring-boot:3.3.5:run (default-cli) > test-compile @ backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ backend ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 15 source files with javac [debug parameters release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ backend ---
+[INFO] skip non existing resourceDirectory C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ backend ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 17] to target\test-classes
+[INFO] 
+[INFO] <<< spring-boot:3.3.5:run (default-cli) < test-compile @ backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.3.5:run (default-cli) @ backend ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2026-03-31T15:12:09.041+05:30  INFO 15656 --- [AiResumeInsight] [           main] c.a.AiResumeInsightApplication           : Starting AiResumeInsightApplication using Java 25 with PID 15656 (C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend\target\classes started by MSI1 in C:\Users\MSI1\OneDrive\Desktop\Yogesh Project\backend)
+2026-03-31T15:12:09.044+05:30  INFO 15656 --- [AiResumeInsight] [           main] c.a.AiResumeInsightApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-03-31T15:12:10.039+05:30  INFO 15656 --- [AiResumeInsight] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-31T15:12:10.317+05:30  INFO 15656 --- [AiResumeInsight] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 268 ms. Found 2 JPA repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (file:/C:/Users/MSI1/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.31/tomcat-embed-core-10.1.31.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+2026-03-31T15:12:11.051+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-03-31T15:12:11.065+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-31T15:12:11.065+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.31]
+2026-03-31T15:12:11.190+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-03-31T15:12:11.191+05:30  INFO 15656 --- [AiResumeInsight] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2068 ms
+2026-03-31T15:12:11.392+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-31T15:12:11.502+05:30  INFO 15656 --- [AiResumeInsight] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-03-31T15:12:11.543+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-31T15:12:12.000+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-31T15:12:12.061+05:30  INFO 15656 --- [AiResumeInsight] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-31T15:12:12.288+05:30  INFO 15656 --- [AiResumeInsight] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5a466dd
+2026-03-31T15:12:12.291+05:30  INFO 15656 --- [AiResumeInsight] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-31T15:12:12.372+05:30  WARN 15656 --- [AiResumeInsight] [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-31T15:12:13.662+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: alter table job_description modify column description LONGTEXT
+Hibernate: alter table job_description modify column required_skills TEXT
+Hibernate: alter table resume modify column original_text LONGTEXT
+2026-03-31T15:12:13.838+05:30  INFO 15656 --- [AiResumeInsight] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-31T15:12:14.695+05:30  WARN 15656 --- [AiResumeInsight] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-31T15:12:15.103+05:30  INFO 15656 --- [AiResumeInsight] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-03-31T15:12:15.111+05:30  INFO 15656 --- [AiResumeInsight] [           main] c.a.AiResumeInsightApplication           : Started AiResumeInsightApplication in 6.96 seconds (process running for 7.736)
+2026-03-31T15:15:20.472+05:30  INFO 15656 --- [AiResumeInsight] [nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-31T15:15:20.473+05:30  INFO 15656 --- [AiResumeInsight] [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-31T15:15:20.478+05:30  INFO 15656 --- [AiResumeInsight] [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+Hibernate: select r1_0.id,r1_0.applicant_name,r1_0.email,r1_0.experience_years,r1_0.original_text,r1_0.phone,r1_0.skills,r1_0.status,r1_0.uploaded_at from resume r1_0
+Hibernate: delete from resume where id=?
+2026-03-31T15:15:29.317+05:30  INFO 15656 --- [AiResumeInsight] [nio-8080-exec-8] c.a.service.AIExtractionService          : Sending prompt to AI for extraction...
+2026-03-31T15:15:29.550+05:30  WARN 15656 --- [AiResumeInsight] [nio-8080-exec-8] o.s.ai.ollama.api.OllamaApi              : [404] Not Found - {"error":"model 'llama3.1' not found"}
+2026-03-31T15:15:29.552+05:30 ERROR 15656 --- [AiResumeInsight] [nio-8080-exec-8] c.a.service.AIExtractionService          : AI Extraction failed: [404] Not Found - {"error":"model 'llama3.1' not found"}. Using regex fallback.
+Hibernate: insert into resume (applicant_name,email,experience_years,original_text,phone,skills,status,uploaded_at) values (?,?,?,?,?,?,?,?)

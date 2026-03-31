@@ -73,6 +73,9 @@ public class ResumeController {
             }
             
             resume.setExperienceYears(candidate.getExperienceYears());
+            resume.setEducation(candidate.getEducation());
+            resume.setCurrentJobTitle(candidate.getCurrentJobTitle());
+            resume.setSummary(candidate.getSummary());
             resume.setStatus(candidate.getStatus());
 
             Resume savedResume = resumeService.saveResume(resume);

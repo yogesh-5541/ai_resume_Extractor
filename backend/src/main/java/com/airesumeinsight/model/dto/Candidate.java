@@ -9,16 +9,22 @@ public class Candidate {
     private List<String> skills;
     private Double experienceYears;
     private String status;
+    private String education;
+    private String currentJobTitle;
+    private String summary;
 
     public Candidate() {}
 
-    public Candidate(String name, String email, String phone, List<String> skills, Double experienceYears, String status) {
+    public Candidate(String name, String email, String phone, List<String> skills, Double experienceYears, String status, String education, String currentJobTitle, String summary) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.skills = skills;
         this.experienceYears = experienceYears;
         this.status = status;
+        this.education = education;
+        this.currentJobTitle = currentJobTitle;
+        this.summary = summary;
     }
 
     public static CandidateBuilder builder() {
@@ -43,6 +49,15 @@ public class Candidate {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
+    public String getEducation() { return education; }
+    public void setEducation(String education) { this.education = education; }
+
+    public String getCurrentJobTitle() { return currentJobTitle; }
+    public void setCurrentJobTitle(String currentJobTitle) { this.currentJobTitle = currentJobTitle; }
+
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+
     public static class CandidateBuilder {
         private String name;
         private String email;
@@ -50,6 +65,9 @@ public class Candidate {
         private List<String> skills;
         private Double experienceYears;
         private String status;
+        private String education;
+        private String currentJobTitle;
+        private String summary;
 
         public CandidateBuilder name(String name) { this.name = name; return this; }
         public CandidateBuilder email(String email) { this.email = email; return this; }
@@ -57,9 +75,12 @@ public class Candidate {
         public CandidateBuilder skills(List<String> skills) { this.skills = skills; return this; }
         public CandidateBuilder experienceYears(Double experienceYears) { this.experienceYears = experienceYears; return this; }
         public CandidateBuilder status(String status) { this.status = status; return this; }
+        public CandidateBuilder education(String education) { this.education = education; return this; }
+        public CandidateBuilder currentJobTitle(String currentJobTitle) { this.currentJobTitle = currentJobTitle; return this; }
+        public CandidateBuilder summary(String summary) { this.summary = summary; return this; }
 
         public Candidate build() {
-            return new Candidate(name, email, phone, skills, experienceYears, status);
+            return new Candidate(name, email, phone, skills, experienceYears, status, education, currentJobTitle, summary);
         }
     }
 }

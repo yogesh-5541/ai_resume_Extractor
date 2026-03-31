@@ -10,7 +10,17 @@ interface ExtractedCandidate {
   phone?: string;
   skills?: string[];
   experienceYears?: number;
+  education?: string;
+  currentJobTitle?: string;
+  summary?: string;
   status?: string;
+}
+
+interface BatchItem {
+  id: string;
+  name: string;
+  progress: number;
+  status: 'pending' | 'uploading' | 'success' | 'error';
 }
 
 function App() {
@@ -22,6 +32,7 @@ function App() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const [candidate, setCandidate] = useState<ExtractedCandidate | null>(null);
+  const [batchItems, setBatchItems] = useState<BatchItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = async (file: File) => {
@@ -64,23 +75,51 @@ function App() {
     }
   };
 
+  const handleBatchFiles = async (files: File[]) => {
+    setMessage({ text: `Processing ${files.length} resumes...`, type: 'success' });
+    const items: BatchItem[] = files.map(f => ({ id: Math.random().toString(), name: f.name, progress: 0, status: 'pending' }));
+    setBatchItems(items);
+
+    // Upload sequentially to avoid overloading the AI model limits
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const itemId = items[i].id;
+      
+      setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'uploading' } : item));
+      
+      try {
+        await resumeService.uploadFile(file, (evt) => {
+          const pct = evt.total ? Math.round((evt.loaded * 100) / evt.total) : 0;
+          setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, progress: Math.max(10, pct) } : item));
+        });
+        setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'success', progress: 100 } : item));
+      } catch (err) {
+        setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'error' } : item));
+      }
+    }
+    setMessage({ text: `Batch process completed! Go to the Dashboard to view all candidates.`, type: 'success' });
+  };
+
   const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsHovered(true); };
   const handleDragLeave = (e: React.DragEvent) => { e.preventDefault(); setIsHovered(false); };
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsHovered(false);
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
+    if (files.length === 1) {
       handleFile(files[0]);
-      e.dataTransfer.clearData();
+    } else if (files.length > 1) {
+      handleBatchFiles(files);
     }
   };
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
+    const files = Array.from(e.target.files || []).filter(f => f.type === 'application/pdf');
+    if (files.length === 1) {
       handleFile(files[0]);
-      e.target.value = '';
+    } else if (files.length > 1) {
+      handleBatchFiles(files);
     }
+    e.target.value = '';
   };
 
   const handleReset = () => {
@@ -90,6 +129,7 @@ function App() {
     setCandidate(null);
     setMessage(null);
     setProgress(0);
+    setBatchItems([]);
   };
 
   return (
@@ -158,13 +198,14 @@ function App() {
           )}
 
           {/* ── Upload Zone (shown only before a file is selected) ── */}
-          {!previewUrl && (
+          {!previewUrl && batchItems.length === 0 && (
             <div className="flex justify-center mb-10">
               <input
                 type="file"
                 ref={fileInputRef}
                 className="hidden"
                 accept=".pdf"
+                multiple
                 onChange={handleFileInputChange}
               />
               <div
@@ -187,9 +228,45 @@ function App() {
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-slate-800 mb-1">
-                  Click or drag a PDF resume here
+                  Click or drag one or multiple PDF resumes here
                 </h3>
-                <p className="text-sm text-slate-500">Only PDF files are supported</p>
+                <p className="text-sm text-slate-500">Supports batch uploading (PDF only)</p>
+              </div>
+            </div>
+          )}
+
+          {/* ── Batch Upload View ── */}
+          {batchItems.length > 0 && !previewUrl && (
+            <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+              <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+                 <h2 className="text-2xl font-bold text-slate-800">Batch Processing {batchItems.length} Resumes</h2>
+                 {batchItems.every(b => b.status === 'success' || b.status === 'error') && (
+                    <button onClick={() => setActiveTab('dashboard')} className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md transition-all">
+                       View Dashboard
+                    </button>
+                 )}
+              </div>
+              <div className="space-y-4 max-h-[500px] overflow-y-auto px-2 custom-scrollbar">
+                 {batchItems.map((item, idx) => (
+                    <div key={item.id} className="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden">
+                       <span className="w-8 h-8 flex-shrink-0 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center font-bold text-sm mr-4 z-10">{idx + 1}</span>
+                       <div className="flex-1 min-w-0 z-10">
+                          <p className="font-semibold text-slate-800 truncate">{item.name}</p>
+                          <div className="mt-2 flex items-center space-x-3">
+                             <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                                <div className={`h-full transition-all duration-300 ${item.status === 'error' ? 'bg-red-500' : 'bg-blue-600'}`} style={{ width: `${item.progress}%` }}></div>
+                             </div>
+                             <span className="text-xs font-bold w-10 text-right text-slate-500">{item.progress}%</span>
+                          </div>
+                          <p className={`text-xs mt-1 font-semibold ${item.status === 'success' ? 'text-emerald-600' : item.status === 'error' ? 'text-red-500' : item.status === 'uploading' ? 'text-blue-500 animate-pulse' : 'text-slate-400'}`}>
+                            {item.status.toUpperCase()}
+                          </p>
+                       </div>
+                       
+                       {/* Background color block for success/error indication */}
+                       <div className={`absolute top-0 right-0 bottom-0 w-2 ${item.status === 'success' ? 'bg-emerald-500' : item.status === 'error' ? 'bg-red-500' : 'bg-transparent'}`}></div>
+                    </div>
+                 ))}
               </div>
             </div>
           )}
@@ -273,7 +350,8 @@ function App() {
                           </div>
                           <div>
                             <p className="text-lg font-bold text-slate-800">{candidate.name || 'Unknown'}</p>
-                            <p className="text-sm text-slate-400">{candidate.email || 'No email found'}</p>
+                            <p className="text-sm font-medium text-indigo-600">{candidate.currentJobTitle || 'Candidate'}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{candidate.email || 'No email found'}</p>
                           </div>
                         </div>
                         <span className={`px-3 py-1 text-xs font-black uppercase tracking-widest rounded-full ${
@@ -287,19 +365,33 @@ function App() {
 
                       <div className="grid grid-cols-2 gap-4">
                         {/* Phone */}
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 flex flex-col justify-center">
                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Phone</p>
                           <p className="text-sm font-semibold text-slate-700">{candidate.phone || '—'}</p>
                         </div>
 
                         {/* Experience */}
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 flex flex-col justify-center">
                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Experience</p>
                           <p className="text-sm font-semibold text-slate-700">
                             {candidate.experienceYears != null ? `${candidate.experienceYears} yrs` : '—'}
                           </p>
                         </div>
                       </div>
+
+                      {/* Education */}
+                      <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Education</p>
+                        <p className="text-sm font-semibold text-slate-700">{candidate.education || 'Not specified'}</p>
+                      </div>
+
+                      {/* Summary */}
+                      {candidate.summary && (
+                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Professional Summary</p>
+                          <p className="text-sm text-slate-600 leading-relaxed italic">"{candidate.summary}"</p>
+                        </div>
+                      )}
 
                       {/* Skills */}
                       <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
