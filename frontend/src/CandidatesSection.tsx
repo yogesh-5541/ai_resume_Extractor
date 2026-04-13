@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface CandidateData {
@@ -57,6 +57,30 @@ export default function CandidatesSection() {
       console.error('Failed to clear candidates', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const deleteCandidate = async (candidateId: number, candidateName: string) => {
+    if (!window.confirm(`Are you sure you want to delete ${candidateName || 'this candidate'}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await axios.delete(`${API_BASE}/resumes/${candidateId}`);
+      
+      // Update local state
+      setCandidates(prev => prev.filter(c => c.id !== candidateId));
+      
+      // Close expanded view if this candidate was expanded
+      if (expandedId === candidateId) {
+        setExpandedId(null);
+      }
+      
+      // Show success feedback
+      alert('Candidate deleted successfully!');
+    } catch (error) {
+      console.error('Failed to delete candidate:', error);
+      alert('Failed to delete candidate. Please try again.');
     }
   };
 
@@ -136,7 +160,19 @@ export default function CandidatesSection() {
                 {/* Default Collapsed View Header */}
                 <div className="p-6 relative">
                   <div className="absolute top-6 right-6 flex items-center space-x-3">
-                     <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm backdrop-blur-md ${isSuccess ? 'bg-emerald-100/80 text-emerald-700 border border-emerald-200/60' : 'bg-red-100/80 text-red-700 border border-red-200/60'}`}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteCandidate(candidate.id, name);
+                      }}
+                      className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200 hover:scale-110 shadow-sm hover:shadow-md"
+                      title="Delete candidate"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                      </svg>
+                    </button>
+                    <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm backdrop-blur-md ${isSuccess ? 'bg-emerald-100/80 text-emerald-700 border border-emerald-200/60' : 'bg-red-100/80 text-red-700 border border-red-200/60'}`}>
                       {candidate.status}
                     </span>
                   </div>
@@ -231,11 +267,32 @@ export default function CandidatesSection() {
                 </div>
 
                 {/* Footer Expand Indicator */}
-                <div className="bg-slate-50/50 py-3 text-center border-t border-slate-100 group-hover:bg-blue-50/50 transition-colors cursor-pointer">
-                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-blue-500 transition-colors flex items-center justify-center">
-                        {isExpanded ? 'Click to Collapse Details' : 'View Full Details'}
-                        <svg className={`w-4 h-4 ml-1.5 transform transition-transform duration-500 ${isExpanded ? 'rotate-180 text-blue-500' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </span>
+                <div className={`bg-slate-50/50 py-3 border-t border-slate-100 transition-colors ${isExpanded ? '' : 'group-hover:bg-blue-50/50 cursor-pointer'}`}>
+                    {isExpanded ? (
+                        <div className="flex items-center justify-between px-6">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center">
+                                <svg className="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                Expanded Details
+                            </span>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteCandidate(candidate.id, name);
+                                }}
+                                className="px-3 py-1.5 bg-red-600 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-red-700 transition-colors flex items-center gap-1.5 shadow-sm"
+                            >
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Delete Candidate
+                            </button>
+                        </div>
+                    ) : (
+                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-blue-500 transition-colors flex items-center justify-center cursor-pointer">
+                            View Full Details
+                            <svg className="w-4 h-4 ml-1.5 transform transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    )}
                 </div>
 
               </div>
