@@ -1,9 +1,11 @@
 package com.airesumeinsight.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.airesumeinsight.model.Resume;
 import com.airesumeinsight.repository.ResumeRepository;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class ResumeService {
@@ -23,5 +25,12 @@ public class ResumeService {
 
     public void deleteAllResumes() {
         resumeRepository.deleteAll();
+    }
+
+    public void deleteResumeById(Long id) {
+        if (!resumeRepository.existsById(id)) {
+            throw new RuntimeException("Resume not found with id: " + id);
+        }
+        resumeRepository.deleteById(id);
     }
 }

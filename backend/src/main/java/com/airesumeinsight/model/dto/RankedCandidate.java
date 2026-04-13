@@ -9,6 +9,17 @@ public class RankedCandidate {
     private Double score;
     private List<String> matchedSkills;
     private List<String> missingSkills;
+    
+    // Enhanced quantitative metrics
+    private Double skillMatchScore;
+    private Double experienceScore;
+    private Double educationScore;
+    private Double overallFitScore;
+    private Integer totalSkillsMatched;
+    private Integer totalSkillsRequired;
+    private Double experienceRelevanceRatio;
+    private String candidateLevel;
+    private String matchQuality;
 
     public RankedCandidate() {}
 
@@ -58,5 +69,77 @@ public class RankedCandidate {
 
     public void setMissingSkills(List<String> missingSkills) {
         this.missingSkills = missingSkills;
+    }
+
+    public Double getSkillMatchScore() {
+        return skillMatchScore;
+    }
+
+    public void setSkillMatchScore(Double skillMatchScore) {
+        this.skillMatchScore = skillMatchScore;
+    }
+
+    public Double getExperienceScore() {
+        return experienceScore;
+    }
+
+    public void setExperienceScore(Double experienceScore) {
+        this.experienceScore = experienceScore;
+    }
+
+    public Double getEducationScore() {
+        return educationScore;
+    }
+
+    public void setEducationScore(Double educationScore) {
+        this.educationScore = educationScore;
+    }
+
+    public Double getOverallFitScore() {
+        return overallFitScore;
+    }
+
+    public void setOverallFitScore(Double overallFitScore) {
+        this.overallFitScore = overallFitScore;
+    }
+
+    public Integer getTotalSkillsMatched() {
+        return totalSkillsMatched;
+    }
+
+    public void setTotalSkillsMatched(Integer totalSkillsMatched) {
+        this.totalSkillsMatched = totalSkillsMatched;
+    }
+
+    public Integer getTotalSkillsRequired() {
+        return totalSkillsRequired;
+    }
+
+    public void setTotalSkillsRequired(Integer totalSkillsRequired) {
+        this.totalSkillsRequired = totalSkillsRequired;
+    }
+
+    public Double getExperienceRelevanceRatio() {
+        return experienceRelevanceRatio;
+    }
+
+    public void setExperienceRelevanceRatio(Double experienceRelevanceRatio) {
+        this.experienceRelevanceRatio = experienceRelevanceRatio;
+    }
+
+    public String getCandidateLevel() {
+        return candidateLevel;
+    }
+
+    public void setCandidateLevel(String candidateLevel) {
+        this.candidateLevel = candidateLevel;
+    }
+
+    public String getMatchQuality() {
+        return matchQuality;
+    }
+
+    public void setMatchQuality(String matchQuality) {
+        this.matchQuality = matchQuality;
     }
 }
