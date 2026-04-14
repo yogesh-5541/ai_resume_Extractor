@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -29,32 +26,6 @@ public class EnhancedExtractionService {
     
     private final ChatModel chatModel;
     private final ObjectMapper objectMapper;
-    
-    // Enhanced skill database
-    private static final List<String> ENHANCED_SKILLS = Arrays.asList(
-        "Java", "Python", "JavaScript", "TypeScript", "C#", "C++", "Go", "Rust", "Swift", "Kotlin", "Scala",
-        "Ruby", "PHP", "Perl", "R", "MATLAB", "Julia", "Dart", "Lua", "Haskell",
-        "React", "Angular", "Vue.js", "Node.js", "Express", "Django", "Flask", "Spring Boot", "ASP.NET", "Laravel",
-        "Next.js", "Nuxt.js", "Svelte", "Ember.js", "Backbone.js", "jQuery", "WordPress", "Shopify",
-        "MySQL", "PostgreSQL", "MongoDB", "Redis", "Elasticsearch", "Cassandra", "DynamoDB", "Firebase",
-        "Oracle", "SQL Server", "SQLite", "Neo4j", "Couchbase", "InfluxDB",
-        "AWS", "Azure", "GCP", "Google Cloud", "DigitalOcean", "Heroku", "Netlify", "Vercel",
-        "Docker", "Kubernetes", "Jenkins", "GitLab CI", "GitHub Actions", "Terraform", "Ansible",
-        "Git", "JIRA", "Confluence", "Slack", "Figma", "Adobe Creative Suite", "Sketch", "Framer",
-        "Postman", "Insomnia", "VS Code", "IntelliJ IDEA", "Eclipse", "Sublime Text",
-        "Salesforce", "HubSpot", "Marketo", "Google Analytics", "Adobe Analytics", "Mixpanel", "Segment",
-        "Tableau", "Power BI", "Excel", "Google Sheets", "Looker", "Domo",
-        "Leadership", "Communication", "Project Management", "Team Collaboration", "Problem Solving", "Critical Thinking",
-        "Time Management", "Negotiation", "Presentation Skills", "Public Speaking", "Writing Skills",
-        "Research Skills", "Analytical Skills", "Creativity", "Adaptability", "Mentoring",
-        "Machine Learning", "Data Science", "Artificial Intelligence", "Blockchain", "Cybersecurity", "DevOps",
-        "Mobile Development", "Web Development", "Full Stack", "Backend Development", "Frontend Development",
-        "Cloud Architecture", "Microservices", "API Development", "UI/UX Design", "Product Management",
-        "Web3", "Blockchain", "NFT", "DeFi", "Smart Contracts", "Solidity", "Web3.js",
-        "Metaverse", "AR/VR", "Unity", "Unreal Engine", "Three.js", "WebGL",
-        "REST", "GraphQL", "gRPC", "WebSocket", "MQTT", "Apache Kafka", "RabbitMQ", "Apache Spark",
-        "Hadoop", "Spark", "Kubernetes", "Helm", "Prometheus", "Grafana", "ELK Stack"
-    );
     
     public EnhancedExtractionService(ChatModel chatModel, ObjectMapper objectMapper) {
         this.chatModel = chatModel;
@@ -200,367 +171,94 @@ public class EnhancedExtractionService {
     }
     
     /**
-     * Advanced text preprocessing
+     * Text preprocessing
      */
     private String preprocessText(String text) {
         if (text == null || text.isBlank()) return "";
-        
-        // Remove excessive whitespace and normalize line endings
-        String cleaned = text.replaceAll("\\r\\n", "\\n")
-                           .replaceAll("\\n{3,}", "\\n\\n")
-                           .replaceAll("[ \\t]{2,}", " ")
-                           .trim();
-        
-        // Remove common OCR artifacts
-        cleaned = cleaned.replaceAll("\\f", " ")
-                           .replaceAll("\\v", " ")
-                           .replaceAll("[^\\x00-\\x7F\\n\\r\\t]", " ");
-        
-        // Normalize multiple spaces
-        cleaned = cleaned.replaceAll(" +", " ");
-        
-        return cleaned.trim();
+        return text.replace("\r\n", "\n")
+                   .replaceAll("\n{3,}", "\n\n")
+                   .replaceAll("[ \t]{2,}", " ")
+                   .replaceAll("\f|\u000B", " ")
+                   .replaceAll(" +", " ")
+                   .trim();
     }
     
     /**
-     * AI-powered data enhancement
+     * AI-powered data extraction
      */
     private Candidate enhanceWithAI(String extractedText, String filename) {
-        log.debug("Enhancing extracted data with AI for: {}", filename);
-        
-        try {
-            // Enhanced AI prompt for comprehensive extraction
-            String prompt = String.format("""
-                You are an advanced resume parser and data enrichment specialist. Extract comprehensive information from the resume text below.
-                
-                Focus on extracting and enhancing:
-                1. Personal Information (name, email, phone)
-                2. Professional Summary (enhanced, detailed summary)
-                3. Skills (technical, soft, business, tools)
-                4. Experience (detailed breakdown with achievements)
-                5. Education (degrees, institutions, dates, GPA)
-                6. Certifications (professional, technical)
-                7. Projects (significant projects with technologies)
-                8. Languages (spoken and programming)
-                9. Social Media/Portfolio (LinkedIn, GitHub, personal website)
-                
-                RESUME TEXT:
+        log.debug("Extracting data with AI for: {}", filename);
+
+        // Truncate to avoid slow processing on very long resumes
+        String text = extractedText != null && extractedText.length() > 8000
+                ? extractedText.substring(0, 8000)
+                : extractedText;
+
+        String prompt = """
+                Parse this resume. Return ONLY a JSON object, no markdown, no explanation.
+
+                {"name":"","email":"","phone":"","skills":[],"experienceYears":0,"education":"","currentJobTitle":"","summary":""}
+
+                Rules:
+                - name: full name from top of resume
+                - email: email address
+                - phone: phone number
+                - skills: ALL skills mentioned (technical, soft, tools) as array
+                - experienceYears: total years as number
+                - education: highest degree and institution
+                - currentJobTitle: most recent job title
+                - summary: 1-2 sentence professional summary
+
+                RESUME:
                 %s
-                
-                RULES:
-                - Return ONLY a valid JSON object
-                - Include ALL extracted information, even if partial
-                - Enhance missing information with intelligent defaults
-                - Validate and cross-reference data
-                - Extract contact information with validation
-                - Identify and categorize all skills accurately
-                - Extract quantifiable achievements and metrics
-                
-                OUTPUT FORMAT:
-                {
-                    "name": "Full Name",
-                    "email": "validated@email.com",
-                    "phone": "validated-phone",
-                    "summary": "Enhanced professional summary with key achievements",
-                    "skills": ["Skill1", "Skill2", "Skill3"],
-                    "experienceYears": 5,
-                    "education": "Degree Name from University Name",
-                    "certifications": "Certification Name - Issuing Organization",
-                    "projects": "Project Name: Description with impact",
-                    "languages": "English (Native/Bilingual)",
-                    "currentJobTitle": "Current Job Title",
-                    "status": "GOOD"
-                }
-                """, extractedText);
-            
-            long startTime = System.currentTimeMillis();
-            String response = chatModel.call(prompt);
-            long processingTime = System.currentTimeMillis() - startTime;
-            
-            log.info("AI enhancement completed in {}ms", processingTime);
-            
-            // Parse and build enhanced candidate object
-            return parseEnhancedAIResponse(response, extractedText);
-            
-        } catch (Exception e) {
-            log.error("AI enhancement failed", e);
-            return buildFallbackCandidate(extractedText);
-        }
+                """.formatted(text);
+
+        long startTime = System.currentTimeMillis();
+        String response = chatModel.call(prompt);
+        log.info("AI extraction completed in {}ms", System.currentTimeMillis() - startTime);
+
+        return parseEnhancedAIResponse(response, extractedText);
     }
     
     /**
-     * Parse enhanced AI response
+     * Parse AI response into Candidate
      */
     private Candidate parseEnhancedAIResponse(String response, String extractedText) {
+        String cleanedJson = extractJsonFromResponse(response);
+
         try {
-            // Clean and extract JSON
-            String cleanedJson = extractJsonFromResponse(response);
-            
-            // Parse the enhanced response
             com.fasterxml.jackson.databind.JsonNode rootNode = objectMapper.readTree(cleanedJson);
-            
+
             Candidate candidate = new Candidate();
-            
-            // Extract all fields
             candidate.setName(safeGetText(rootNode, "name"));
-            candidate.setEmail(validateEmail(safeGetText(rootNode, "email")));
-            candidate.setPhone(validatePhone(safeGetText(rootNode, "phone")));
+            candidate.setEmail(safeGetText(rootNode, "email"));
+            candidate.setPhone(safeGetText(rootNode, "phone"));
             candidate.setSummary(safeGetText(rootNode, "summary"));
             candidate.setCurrentJobTitle(safeGetText(rootNode, "currentJobTitle"));
-            candidate.setStatus(safeGetText(rootNode, "status"));
-            
-            // Extract skills
+            candidate.setEducation(safeGetText(rootNode, "education"));
+
             if (rootNode.hasNonNull("skills") && rootNode.get("skills").isArray()) {
                 List<String> skills = new ArrayList<>();
                 for (com.fasterxml.jackson.databind.JsonNode skill : rootNode.get("skills")) {
                     String skillText = skill.asText().trim();
-                    if (!skillText.isEmpty()) {
-                        skills.add(skillText);
-                    }
+                    if (!skillText.isEmpty()) skills.add(skillText);
                 }
                 candidate.setSkills(skills);
             }
-            
-            // Extract experience years
+
             if (rootNode.hasNonNull("experienceYears")) {
                 candidate.setExperienceYears(rootNode.get("experienceYears").asDouble());
             }
-            
-            // Extract education
-            candidate.setEducation(safeGetText(rootNode, "education"));
-            
-            // Determine status if not provided
-            if (candidate.getStatus() == null || candidate.getStatus().isEmpty()) {
-                String status = determineCandidateStatus(candidate);
-                candidate.setStatus(status);
-            }
-            
+
+            candidate.setStatus(candidate.getName() != null ? "SUCCESS" : "FAILED");
             return candidate;
-            
+
         } catch (Exception e) {
-            log.error("Failed to parse enhanced AI response: {}", e.getMessage());
-            return buildFallbackCandidate(extractedText);
+            log.error("Failed to parse AI response: {}", e.getMessage());
+            Candidate failed = new Candidate();
+            failed.setStatus("FAILED");
+            return failed;
         }
-    }
-    
-    /**
-     * Enhanced email validation
-     */
-    private String validateEmail(String email) {
-        if (email == null || email.isBlank()) return null;
-        
-        // Basic format check
-        if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            return null;
-        }
-        
-        // Common typo corrections
-        email = email.toLowerCase()
-                   .replaceAll(".con", ".com")
-                   .replaceAll("gmial.com", "gmail.com")
-                   .replaceAll("gmaill.com", "gmail.com");
-        
-        return email.toLowerCase();
-    }
-    
-    /**
-     * Enhanced phone validation
-     */
-    private String validatePhone(String phone) {
-        if (phone == null || phone.isBlank()) return null;
-        
-        // Remove all non-digit characters
-        String digits = phone.replaceAll("[^0-9+]", "");
-        
-        // Basic validation
-        if (digits.length() < 10 || digits.length() > 15) {
-            return null;
-        }
-        
-        // Format with country code if long enough
-        if (digits.length() == 10) {
-            return String.format("(%s) %s-%s", 
-                   digits.substring(0, 3), 
-                   digits.substring(3, 6), 
-                   digits.substring(6));
-        } else if (digits.length() > 10) {
-            return digits;
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Determine candidate status based on extraction quality
-     */
-    private String determineCandidateStatus(Candidate candidate) {
-        // Simple heuristic based on available data
-        int score = 0;
-        if (candidate.getName() != null && !candidate.getName().isEmpty()) score += 20;
-        if (candidate.getEmail() != null && !candidate.getEmail().isEmpty()) score += 20;
-        if (candidate.getPhone() != null && !candidate.getPhone().isEmpty()) score += 15;
-        if (candidate.getSkills() != null && !candidate.getSkills().isEmpty()) score += 20;
-        if (candidate.getSummary() != null && !candidate.getSummary().isEmpty()) score += 15;
-        if (candidate.getEducation() != null && !candidate.getEducation().isEmpty()) score += 10;
-        
-        if (score >= 85) return "EXCELLENT";
-        else if (score >= 70) return "GOOD";
-        else if (score >= 50) return "FAIR";
-        else return "POOR";
-    }
-    
-    /**
-     * Build fallback candidate with enhanced processing
-     */
-    private Candidate buildFallbackCandidate(String text) {
-        Candidate candidate = new Candidate();
-        
-        // Use enhanced extraction methods
-        candidate.setName(extractEnhancedName(text));
-        candidate.setEmail(validateEmail(extractEnhancedEmail(text)));
-        candidate.setPhone(validatePhone(extractEnhancedPhone(text)));
-        candidate.setSkills(extractEnhancedSkills(text));
-        candidate.setExperienceYears((double) extractEnhancedExperience(text));
-        candidate.setEducation(extractEnhancedEducation(text));
-        candidate.setSummary(extractEnhancedSummary(text));
-        candidate.setStatus(determineCandidateStatus(candidate));
-        
-        return candidate;
-    }
-    
-    /**
-     * Enhanced name extraction
-     */
-    private String extractEnhancedName(String text) {
-        String[] lines = text.split("[\\r\\n]+");
-        for (String line : lines) {
-            line = line.trim();
-            if (line.isEmpty() || line.contains("@")) continue;
-            
-            // Skip common header lines
-            if (line.matches("(?i)resume|cv|curriculum vitae|objective|summary|experience|education|skills|projects|certifications|languages|contact|phone|email|address")) {
-                continue;
-            }
-            
-            // Look for name patterns
-            if (line.matches("([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)+\\s+[A-Z][a-z]+)") || 
-                line.matches("[A-Z][a-z]+\\s+[A-Z][a-z]+\\s+[A-Z][a-z]+")) {
-                return toTitleCase(line);
-            }
-            
-            // Single word names (all caps)
-            if (line.matches("^[A-Z]+$") && line.length() <= 4 && line.length() >= 2) {
-                return line;
-            }
-            
-            // Two-word names with proper capitalization
-            if (line.matches("^[A-Z][a-z]+\\s+[A-Z][a-z]+$")) {
-                return toTitleCase(line);
-            }
-        }
-        return null;
-    }
-    
-    /**
-     * Enhanced email extraction
-     */
-    private String extractEnhancedEmail(String text) {
-        Pattern emailPattern = Pattern.compile(
-            "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", 
-            Pattern.CASE_INSENSITIVE
-        );
-        Matcher matcher = emailPattern.matcher(text);
-        return matcher.find() ? matcher.group().toLowerCase().trim() : null;
-    }
-    
-    /**
-     * Enhanced phone extraction
-     */
-    private String extractEnhancedPhone(String text) {
-        Pattern[] patterns = {
-            Pattern.compile("(\\\\+?\\\\d{1,3}[.\\\\s-]?)?\\\\(?\\\\d{3}\\\\)?[.\\\\s-]?\\\\d{3,4}\\\\s?\\\\d{4}", Pattern.CASE_INSENSITIVE),
-            Pattern.compile("\\\\(?\\\\d{3}\\\\)?[.\\\\s-]?\\\\d{3}[.\\\\s-]?\\\\d{4}", Pattern.CASE_INSENSITIVE),
-            Pattern.compile("\\\\(?\\\\d{2,4})[.\\\\s-]?\\\\d{4}", Pattern.CASE_INSENSITIVE),
-            Pattern.compile("\\\\d{10,15}", Pattern.CASE_INSENSITIVE)
-        };
-        
-        for (Pattern pattern : patterns) {
-            Matcher matcher = pattern.matcher(text);
-            if (matcher.find()) {
-                return matcher.group().replaceAll("[^0-9+]", "");
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Enhanced skills extraction
-     */
-    private List<String> extractEnhancedSkills(String text) {
-        List<String> skills = new ArrayList<>();
-        
-        // First try AI-known skills
-        for (String skill : ENHANCED_SKILLS) {
-            String patternString = "\\b" + Pattern.quote(skill) + "\\b";
-            Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
-            if (pattern.matcher(text).find()) {
-                skills.add(skill);
-            }
-        }
-        
-        return skills;
-    }
-    
-    /**
-     * Enhanced experience extraction
-     */
-    private int extractEnhancedExperience(String text) {
-        Pattern pattern = Pattern.compile("(\\d+)\\s*(?:year|years|yr|y)?", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(text);
-        
-        int max = 0;
-        while (matcher.find()) {
-            try {
-                int years = Integer.parseInt(matcher.group(1));
-                if (years > max && years < 60) max = years;
-            } catch (Exception e) {
-                log.debug("Could not parse years: {}", matcher.group(1));
-            }
-        }
-        
-        return max;
-    }
-    
-    /**
-     * Enhanced education extraction
-     */
-    private String extractEnhancedEducation(String text) {
-        Pattern educationPattern = Pattern.compile(
-            "(?i)(?:bachelor|master|phd|doctorate|associate|degree|diploma|certificate|bs|ms|phd|ba|ma).{0,50}(?:university|college|institute|school|academy)",
-            Pattern.CASE_INSENSITIVE
-        );
-        
-        Matcher matcher = educationPattern.matcher(text);
-        return matcher.find() ? matcher.group().trim() : null;
-    }
-    
-    /**
-     * Enhanced summary extraction
-     */
-    private String extractEnhancedSummary(String text) {
-        String[] sentences = text.split("[.!?]+");
-        for (String sentence : sentences) {
-            sentence = sentence.trim();
-            if (sentence.length() > 50 && sentence.length() < 200 &&
-                (sentence.toLowerCase().contains("experience") || 
-                 sentence.toLowerCase().contains("skilled") ||
-                 sentence.toLowerCase().contains("professional") ||
-                 sentence.toLowerCase().contains("expert"))) {
-                return sentence;
-            }
-        }
-        return null;
     }
     
     /**

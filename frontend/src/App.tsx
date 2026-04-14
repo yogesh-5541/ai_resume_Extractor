@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { resumeService } from './services/resumeService'
 import Dashboard from './Dashboard'
 import ResumePreview from './components/ResumePreview'
@@ -34,6 +34,8 @@ function App() {
   const [candidate, setCandidate] = useState<ExtractedCandidate | null>(null);
   const [batchItems, setBatchItems] = useState<BatchItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // Track whether a batch is actively running so tab switches don't reset it
+  const batchRunningRef = useRef(false);
 
   const handleFile = async (file: File) => {
     // PDF only
@@ -76,28 +78,41 @@ function App() {
   };
 
   const handleBatchFiles = async (files: File[]) => {
-    setMessage({ text: `Processing ${files.length} resumes...`, type: 'success' });
+    const CONCURRENCY = 5;
+    setMessage({ text: `Processing ${files.length} resumes (up to ${CONCURRENCY} at a time)...`, type: 'success' });
     const items: BatchItem[] = files.map(f => ({ id: Math.random().toString(), name: f.name, progress: 0, status: 'pending' }));
     setBatchItems(items);
+    batchRunningRef.current = true;
 
-    // Upload sequentially to avoid overloading the AI model limits
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const itemId = items[i].id;
-      
-      setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'uploading' } : item));
-      
+    const uploadOne = async (file: File, itemId: string) => {
+      setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'uploading', progress: 5 } : item));
       try {
         await resumeService.uploadFile(file, (evt) => {
-          const pct = evt.total ? Math.round((evt.loaded * 100) / evt.total) : 0;
-          setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, progress: Math.max(10, pct) } : item));
+          const pct = evt.total ? Math.min(90, Math.round((evt.loaded * 100) / evt.total)) : 10;
+          setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, progress: pct } : item));
         });
         setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'success', progress: 100 } : item));
-      } catch (err) {
-        setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'error' } : item));
+      } catch {
+        setBatchItems(curr => curr.map(item => item.id === itemId ? { ...item, status: 'error', progress: 0 } : item));
       }
-    }
-    setMessage({ text: `Batch process completed! Go to the Dashboard to view all candidates.`, type: 'success' });
+    };
+
+    // Semaphore: keep exactly CONCURRENCY slots active at all times.
+    // As soon as one finishes, the next pending file immediately fills the slot.
+    let index = 0;
+    const runNext = async (): Promise<void> => {
+      const i = index++;
+      if (i >= files.length) return;
+      await uploadOne(files[i], items[i].id);
+      await runNext(); // this slot is free — grab the next file immediately
+    };
+
+    // Seed the initial CONCURRENCY workers
+    const workers = Array.from({ length: Math.min(CONCURRENCY, files.length) }, () => runNext());
+    await Promise.allSettled(workers);
+
+    batchRunningRef.current = false;
+    setMessage({ text: `Batch complete! Go to the Dashboard to view all candidates.`, type: 'success' });
   };
 
   const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsHovered(true); };
@@ -122,7 +137,9 @@ function App() {
     e.target.value = '';
   };
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
+    // Don't reset if a batch or single upload is still in progress
+    if (batchRunningRef.current || isLoading) return;
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPreviewUrl(null);
     setUploadedFileName(null);
@@ -130,7 +147,7 @@ function App() {
     setMessage(null);
     setProgress(0);
     setBatchItems([]);
-  };
+  }, [isLoading, previewUrl]);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
@@ -157,10 +174,13 @@ function App() {
                 Dashboard
               </button>
               <button
-                onClick={() => { setActiveTab('upload'); handleReset(); }}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition shadow-md hover:shadow-lg ${activeTab === 'upload' ? 'bg-indigo-600 text-white shadow-indigo-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
+                onClick={() => { setActiveTab('upload'); if (!batchRunningRef.current && !isLoading) handleReset(); }}
+                className={`relative px-4 py-2 rounded-full text-sm font-semibold transition shadow-md hover:shadow-lg ${activeTab === 'upload' ? 'bg-indigo-600 text-white shadow-indigo-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
               >
                 Upload Resume
+                {(isLoading || batchRunningRef.current) && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 rounded-full animate-pulse border-2 border-white" title="Processing in progress..." />
+                )}
               </button>
             </div>
           </div>
@@ -239,7 +259,21 @@ function App() {
           {batchItems.length > 0 && !previewUrl && (
             <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
               <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
-                 <h2 className="text-2xl font-bold text-slate-800">Batch Processing {batchItems.length} Resumes</h2>
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-800">Batch Processing {batchItems.length} Resumes</h2>
+                  <p className="text-sm text-slate-500 mt-1">
+                    <span className="text-emerald-600 font-semibold">{batchItems.filter(b => b.status === 'success').length} done</span>
+                    {batchItems.filter(b => b.status === 'uploading').length > 0 && (
+                      <span className="text-blue-500 font-semibold ml-3 animate-pulse">
+                        {batchItems.filter(b => b.status === 'uploading').length} processing
+                      </span>
+                    )}
+                    {batchItems.filter(b => b.status === 'error').length > 0 && (
+                      <span className="text-red-500 font-semibold ml-3">{batchItems.filter(b => b.status === 'error').length} failed</span>
+                    )}
+                    <span className="text-slate-400 ml-3">{batchItems.filter(b => b.status === 'pending').length} pending</span>
+                  </p>
+                </div>
                  {batchItems.every(b => b.status === 'success' || b.status === 'error') && (
                     <button onClick={() => setActiveTab('dashboard')} className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md transition-all">
                        View Dashboard
