@@ -280,48 +280,25 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-                  AI Resume Insight
-                </h1>
-                <p className="text-sm text-slate-500">Smart candidate matching powered by AI</p>
-              </div>
-            </div>
-            
-            {/* Enhanced Navigation */}
-            <div className="flex items-center gap-2 p-1 bg-slate-100/50 rounded-xl border border-slate-200/50">
-              {(['ranking', 'candidates', 'analytics'] as const).map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveSection(tab)}
-                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center space-x-2 ${
-                    activeSection === tab
-                      ? 'bg-white text-slate-900 shadow-md border border-slate-200 scale-105'
-                      : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
-                  }`}
-                >
-                  <span>{tab === 'ranking' ? '🎯' : tab === 'candidates' ? '👥' : '📊'}</span>
-                  <span className="hidden sm:inline">{tab === 'ranking' ? 'Ranking' : tab === 'candidates' ? 'Candidates' : 'Analytics'}</span>
-                </button>
-              ))}
-            </div>
+    <div className="min-h-screen bg-[#0a0f1e]">
+      {/* Section Nav */}
+      <div className="glass border-b border-white/[0.06] sticky top-16 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/[0.06] w-fit">
+            {(['ranking', 'candidates', 'analytics'] as const).map(tab => (
+              <button key={tab} onClick={() => setActiveSection(tab)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 ${
+                  activeSection === tab ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'
+                }`}>
+                <span>{tab === 'ranking' ? '🎯' : tab === 'candidates' ? '👥' : '📊'}</span>
+                <span className="hidden sm:inline capitalize">{tab}</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
       {activeSection === 'analytics' ? (
         <AnalyticsSection />
       ) : activeSection === 'candidates' ? (
@@ -333,10 +310,10 @@ export default function Dashboard() {
           <div className="lg:col-span-1 space-y-8">
 
             {/* Job Creation Form */}
-            <div className={`bg-white rounded-2xl shadow-xl border border-slate-100 transition-all duration-300 ${isFormFocused ? 'shadow-2xl scale-[1.02]' : 'hover:shadow-lg'}`}>
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4 rounded-t-2xl">
-                <h2 className="text-xl font-bold text-white flex items-center">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className={`glass rounded-3xl border border-white/[0.08] transition-all duration-300 ${isFormFocused ? 'border-indigo-500/30 shadow-2xl shadow-indigo-500/10' : ''}`}>
+              <div className="px-6 py-5 border-b border-white/[0.06] flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-indigo-500/20 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                   </svg>
                   Job Description
@@ -344,7 +321,7 @@ export default function Dashboard() {
               </div>
               <form onSubmit={handleJobSubmit} className="p-6 space-y-5" onFocus={() => setIsFormFocused(true)} onBlur={() => setIsFormFocused(false)}>
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700 flex items-center">
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center">
                     Job Title
                     <span className="ml-1 text-red-500">*</span>
                   </label>
@@ -352,7 +329,7 @@ export default function Dashboard() {
                     <input 
                       required 
                       type="text" 
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 pl-10" 
+                      className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.06] rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 pl-10" 
                       placeholder="e.g. Senior Frontend Engineer" 
                       value={jobForm.title} 
                       onChange={e => handleInputChange('title', e.target.value)} 
@@ -364,7 +341,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700 flex items-center">
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center">
                     Required Skills
                     <span className="ml-1 text-red-500">*</span>
                   </label>
@@ -372,7 +349,7 @@ export default function Dashboard() {
                     <input 
                       required 
                       type="text" 
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 pl-10" 
+                      className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.06] rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 pl-10" 
                       placeholder="e.g. React, TypeScript, Tailwind" 
                       value={jobForm.requiredSkills} 
                       onChange={e => handleInputChange('requiredSkills', e.target.value)} 
@@ -384,7 +361,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700 flex items-center">
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center">
                     Min Experience (Years)
                     <span className="ml-1 text-red-500">*</span>
                   </label>
@@ -394,7 +371,7 @@ export default function Dashboard() {
                       type="number" 
                       step="0.5" 
                       min="0" 
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 pl-10" 
+                      className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.06] rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 pl-10" 
                       value={jobForm.minExperience} 
                       onChange={e => setJobForm({...jobForm, minExperience: parseFloat(e.target.value)})} 
                     />
@@ -405,9 +382,9 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700">Description</label>
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Description</label>
                   <textarea 
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 resize-none min-h-[120px]" 
+                    className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.06] rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 resize-none min-h-[120px]" 
                     placeholder="Briefly describe the role and responsibilities..." 
                     value={jobForm.description} 
                     onChange={e => handleInputChange('description', e.target.value)}
@@ -415,7 +392,7 @@ export default function Dashboard() {
                 </div>
 
                 {jobError && (
-                  <div className="p-4 bg-red-50 text-red-600 text-sm rounded-xl font-medium border border-red-100 flex items-center">
+                  <div className="p-4 bg-red-500/10 text-red-400 text-sm rounded-xl font-medium border border-red-500/20 flex items-center">
                     <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -423,14 +400,14 @@ export default function Dashboard() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100">
-                  <div className="flex items-center text-sm text-green-700">
+                <div className="flex items-center justify-between p-3 bg-gradient-to-r bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                  <div className="flex items-center text-sm text-emerald-400">
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     Auto-spell correction enabled
                   </div>
-                  <div className="text-xs text-green-600">AI-powered</div>
+                  <div className="text-xs text-emerald-500">AI-powered</div>
                 </div>
 
                 <button 
@@ -463,9 +440,9 @@ export default function Dashboard() {
             </div>
 
             {/* All Candidates List */}
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-100 transition hover:shadow-lg flex flex-col h-[600px]">
-              <div className="bg-gradient-to-r from-blue-500 to-cyan-600 px-6 py-4 rounded-t-2xl">
-                <h2 className="text-lg font-bold text-white flex items-center justify-between">
+            <div className="glass rounded-2xl border border-white/[0.08] transition hover:shadow-lg flex flex-col h-[600px]">
+              <div className="px-6 py-5 border-b border-white/[0.06]">
+                <h2 className="text-sm font-bold text-slate-200 flex items-center justify-between">
                   <div className="flex items-center">
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -473,11 +450,11 @@ export default function Dashboard() {
                     Candidate Pool
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">
+                    <span className="bg-white/10 px-2 py-1 rounded-full text-xs font-medium text-slate-300">
                       {allCandidates.length} Total
                     </span>
                     {filteredCandidates.length !== allCandidates.length && (
-                      <span className="bg-yellow-400/80 px-2 py-1 rounded-full text-xs font-medium text-slate-800">
+                      <span className="bg-amber-500/20 px-2 py-1 rounded-full text-xs font-medium text-amber-300">
                         {filteredCandidates.length} Filtered
                       </span>
                     )}
@@ -487,13 +464,13 @@ export default function Dashboard() {
               
               {/* Comparison Bar */}
               {selectedForComparison.length > 0 && (
-                <div className="bg-blue-50 border border-blue-200 px-4 py-3">
+                <div className="bg-indigo-500/10 border border-indigo-500/20 px-4 py-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                       </svg>
-                      <span className="text-sm font-medium text-blue-800">
+                      <span className="text-sm font-medium text-indigo-300">
                         {selectedForComparison.length} candidate{selectedForComparison.length > 1 ? 's' : ''} selected
                       </span>
                     </div>
@@ -518,7 +495,7 @@ export default function Dashboard() {
               )}
               
               {/* Search and Filter Section */}
-              <div className="p-4 border-b border-slate-100">
+              <div className="p-4 border-b border-white/[0.06]">
                 <div className="space-y-3">
                   {/* Search Bar */}
                   <div className="relative">
@@ -528,7 +505,7 @@ export default function Dashboard() {
                     <input
                       type="text"
                       placeholder="Search candidates by name, email, or skills..."
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -538,7 +515,7 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between">
                     <button
                       onClick={() => setShowFilters(!showFilters)}
-                      className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                      className="flex items-center space-x-2 text-sm text-indigo-400 hover:text-indigo-300 font-medium"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
@@ -553,7 +530,7 @@ export default function Dashboard() {
                     {(searchQuery || filterExperience > 0 || filterSkills.length > 0) && (
                       <button
                         onClick={clearFilters}
-                        className="text-xs text-slate-500 hover:text-slate-700 font-medium"
+                        className="text-xs text-slate-500 hover:text-slate-300 font-medium"
                       >
                         Clear All
                       </button>
@@ -562,7 +539,7 @@ export default function Dashboard() {
                   
                   {/* Advanced Filters */}
                   {showFilters && (
-                    <div className="space-y-3 pt-3 border-t border-slate-100">
+                    <div className="space-y-3 pt-3 border-t border-white/[0.06]">
                       {/* Experience Filter */}
                       <div>
                         <label className="block text-xs font-medium text-slate-700 mb-1">Min Experience (Years)</label>
@@ -592,8 +569,8 @@ export default function Dashboard() {
                                 onClick={() => toggleSkillFilter(skill)}
                                 className={`px-2 py-1 text-xs rounded-full font-medium transition-colors ${
                                   filterSkills.includes(skill)
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'bg-white/[0.06] text-slate-300 hover:bg-white/[0.1]'
                                 }`}
                               >
                                 {skill}
@@ -712,10 +689,10 @@ export default function Dashboard() {
 
           {/* RIGHT COLUMN: Ranked Results */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-100 min-h-[820px] transition hover:shadow-lg overflow-hidden">
+            <div className="glass rounded-2xl border border-white/[0.08] min-h-[820px] transition hover:shadow-lg overflow-hidden">
               <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-bold text-white flex items-center">
+                  <h2 className="text-sm font-bold text-slate-200 flex items-center">
                     <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -926,7 +903,7 @@ export default function Dashboard() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-white flex items-center">
+                <h2 className="text-sm font-bold text-slate-200 flex items-center">
                   <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                   </svg>
@@ -1027,7 +1004,7 @@ export default function Dashboard() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-white flex items-center">
+                <h2 className="text-sm font-bold text-slate-200 flex items-center">
                   <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                   </svg>
@@ -1063,7 +1040,7 @@ export default function Dashboard() {
                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                           selectedForComparison.includes(selectedCandidate.id)
                             ? 'bg-blue-600 text-white'
-                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                            : 'bg-white/[0.06] text-slate-300 hover:bg-white/[0.1]'
                         }`}
                         disabled={!selectedForComparison.includes(selectedCandidate.id) && selectedForComparison.length >= 3}
                       >
@@ -1149,7 +1126,7 @@ export default function Dashboard() {
                         </svg>
                         Education
                       </h4>
-                      <p className="text-slate-800">
+                      <p className="text-slate-100">
                         {(selectedCandidate as any).education || 'Not specified'}
                       </p>
                     </div>

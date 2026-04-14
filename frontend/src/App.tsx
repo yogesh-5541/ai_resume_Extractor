@@ -4,7 +4,6 @@ import Dashboard from './Dashboard'
 import ResumePreview from './components/ResumePreview'
 
 interface ExtractedCandidate {
-// ... existing interface ...
   name?: string;
   email?: string;
   phone?: string;
@@ -150,9 +149,348 @@ function App() {
   }, [isLoading, previewUrl]);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
+    <div className="min-h-screen bg-[#0a0f1e] text-slate-200 font-sans">
+
       {/* ── Navbar ── */}
-      <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/70 border-b border-slate-200 shadow-sm">
+      <nav className="sticky top-0 z-50 w-full glass border-b border-white/[0.06] shadow-2xl shadow-black/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <span className="font-bold text-lg tracking-tight grad-text">AI Resume Insight</span>
+            </div>
+            <div className="hidden sm:flex items-center gap-1 p-1 rounded-xl bg-white/[0.05] border border-white/[0.08]">
+              <button onClick={() => { setActiveTab('upload'); if (!batchRunningRef.current && !isLoading) handleReset(); }}
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'upload' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}>
+                Upload
+              </button>
+              <button onClick={() => setActiveTab('dashboard')}
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'dashboard' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white'}`}>
+                Dashboard
+              </button>
+              {(isLoading || batchRunningRef.current) && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 ml-1">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  <span className="text-xs font-medium text-amber-400">Processing…</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── Content ── */}
+      {activeTab === 'dashboard' ? (
+        <Dashboard />
+      ) : (
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+          {/* Hero */}
+          {!previewUrl && batchItems.length === 0 && (
+            <div className="text-center mb-14 animate-fade-up">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                AI-Powered Resume Intelligence
+              </div>
+              <h1 className="text-5xl sm:text-6xl font-black tracking-tight text-white mb-5 leading-tight">
+                Hire smarter with{' '}
+                <span className="grad-text">AI precision</span>
+              </h1>
+              <p className="max-w-xl text-lg text-slate-400 mx-auto leading-relaxed">
+                Upload PDF resumes and get instant AI-extracted candidate profiles — skills, experience, education and more.
+              </p>
+            </div>
+          )}
+
+          {/* Toast */}
+          {message && (
+            <div className={`mb-8 px-5 py-3.5 rounded-2xl text-center text-sm font-semibold max-w-2xl mx-auto border animate-scale-in ${
+              message.type === 'success'
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                : 'bg-red-500/10 text-red-400 border-red-500/20'
+            }`}>
+              {message.text}
+            </div>
+          )}
+
+          {/* ── Upload Zone ── */}
+          {!previewUrl && batchItems.length === 0 && (
+            <div className="flex justify-center mb-10 animate-fade-up delay-200">
+              <input type="file" ref={fileInputRef} className="hidden" accept=".pdf" multiple onChange={handleFileInputChange} />
+              <div
+                onClick={() => !isLoading && fileInputRef.current?.click()}
+                onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
+                className={`relative w-full max-w-2xl p-16 rounded-3xl text-center flex flex-col items-center justify-center cursor-pointer overflow-hidden border-2 border-dashed transition-all duration-300 ${
+                  isHovered ? 'border-indigo-500 bg-indigo-500/5 scale-[1.01]' : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]'
+                }`}
+              >
+                <div className={`absolute inset-0 rounded-3xl transition-opacity duration-300 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+                  style={{ background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.1) 0%, transparent 70%)' }} />
+                <div className={`relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center mb-5 transition-all duration-300 ${isHovered ? 'bg-indigo-500/20 text-indigo-400 scale-110' : 'bg-white/[0.06] text-slate-400'}`}>
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                </div>
+                <h3 className="relative z-10 text-xl font-bold text-white mb-2">Drop your resumes here</h3>
+                <p className="relative z-10 text-sm text-slate-500 mb-8">Click to browse or drag &amp; drop · PDF only · Batch supported</p>
+                <div className="relative z-10 flex items-center gap-6 text-xs text-slate-600">
+                  {['AI Extraction', 'Batch Upload', 'Instant Preview'].map(f => (
+                    <div key={f} className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                      </svg>
+                      {f}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── Batch Processing View ── */}
+          {batchItems.length > 0 && !previewUrl && (
+            <div className="max-w-3xl mx-auto glass rounded-3xl border border-white/[0.08] p-8 animate-scale-in">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">Processing {batchItems.length} Resumes</h2>
+                  <div className="flex items-center gap-4 text-sm flex-wrap">
+                    <span className="text-emerald-400 font-semibold">{batchItems.filter(b => b.status === 'success').length} done</span>
+                    {batchItems.filter(b => b.status === 'uploading').length > 0 && (
+                      <span className="text-indigo-400 font-semibold animate-pulse">{batchItems.filter(b => b.status === 'uploading').length} active</span>
+                    )}
+                    {batchItems.filter(b => b.status === 'error').length > 0 && (
+                      <span className="text-red-400 font-semibold">{batchItems.filter(b => b.status === 'error').length} failed</span>
+                    )}
+                    <span className="text-slate-500">{batchItems.filter(b => b.status === 'pending').length} pending</span>
+                  </div>
+                </div>
+                {batchItems.every(b => b.status === 'success' || b.status === 'error') && (
+                  <button onClick={() => setActiveTab('dashboard')}
+                    className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-semibold text-sm shadow-lg shadow-indigo-500/25 transition-all hover:scale-105">
+                    View Dashboard →
+                  </button>
+                )}
+              </div>
+              {/* Overall bar */}
+              <div className="mb-6">
+                <div className="flex justify-between text-xs text-slate-500 mb-1.5">
+                  <span>Overall progress</span>
+                  <span>{Math.round((batchItems.filter(b => b.status === 'success' || b.status === 'error').length / batchItems.length) * 100)}%</span>
+                </div>
+                <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                    style={{ width: `${(batchItems.filter(b => b.status === 'success' || b.status === 'error').length / batchItems.length) * 100}%` }} />
+                </div>
+              </div>
+              <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1">
+                {batchItems.map((item, idx) => (
+                  <div key={item.id} className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 ${
+                    item.status === 'success'   ? 'bg-emerald-500/5 border-emerald-500/15' :
+                    item.status === 'error'     ? 'bg-red-500/5 border-red-500/15' :
+                    item.status === 'uploading' ? 'bg-indigo-500/5 border-indigo-500/20' :
+                    'bg-white/[0.02] border-white/[0.05]'
+                  }`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                      item.status === 'success'   ? 'bg-emerald-500/20 text-emerald-400' :
+                      item.status === 'error'     ? 'bg-red-500/20 text-red-400' :
+                      item.status === 'uploading' ? 'bg-indigo-500/20 text-indigo-400' :
+                      'bg-white/[0.06] text-slate-500'
+                    }`}>
+                      {item.status === 'success' ? '✓' : item.status === 'error' ? '✕' : idx + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-slate-200 truncate mb-1.5">{item.name}</p>
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 h-1 bg-white/[0.06] rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full transition-all duration-500 ${
+                            item.status === 'error' ? 'bg-red-500' : item.status === 'success' ? 'bg-emerald-500' : 'bg-indigo-500'
+                          }`} style={{ width: `${item.progress}%` }} />
+                        </div>
+                        <span className="text-xs text-slate-500 w-8 text-right">{item.progress}%</span>
+                      </div>
+                    </div>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-lg ${
+                      item.status === 'success'   ? 'text-emerald-400 bg-emerald-500/10' :
+                      item.status === 'error'     ? 'text-red-400 bg-red-500/10' :
+                      item.status === 'uploading' ? 'text-indigo-400 bg-indigo-500/10 animate-pulse' :
+                      'text-slate-500 bg-white/[0.04]'
+                    }`}>{item.status}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Single upload progress bar ── */}
+          {isLoading && previewUrl && (
+            <div className="mb-6 max-w-2xl mx-auto">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-indigo-400 animate-pulse">⚡ AI extracting candidate data…</span>
+                <span className="text-xs font-bold text-indigo-400">{progress}%</span>
+              </div>
+              <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+              </div>
+            </div>
+          )}
+
+          {/* ── Split Layout ── */}
+          {previewUrl && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-up">
+
+              {/* LEFT: Candidate Details */}
+              <div className="flex flex-col gap-4">
+                {/* File bar */}
+                <div className="flex items-center justify-between glass rounded-2xl px-4 py-3 border border-white/[0.08]">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 bg-red-500/15 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-slate-200 truncate">{uploadedFileName}</p>
+                      <p className="text-xs text-slate-500">PDF Document</p>
+                    </div>
+                  </div>
+                  <button onClick={() => { handleReset(); fileInputRef.current?.click(); }}
+                    className="ml-3 flex-shrink-0 text-xs font-semibold text-slate-400 hover:text-indigo-400 bg-white/[0.04] hover:bg-indigo-500/10 px-3 py-1.5 rounded-lg border border-white/[0.08] hover:border-indigo-500/30 transition-all">
+                    Upload New
+                  </button>
+                </div>
+
+                {/* Candidate card */}
+                <div className="glass rounded-3xl border border-white/[0.08] overflow-hidden flex-1">
+                  <div className="px-6 py-4 border-b border-white/[0.06] flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Extracted Profile</span>
+                  </div>
+
+                  {isLoading ? (
+                    <div className="p-6 space-y-5">
+                      {[80, 60, 70, 50, 90].map((w, i) => (
+                        <div key={i} className="flex items-center gap-4">
+                          <div className="w-9 h-9 skeleton rounded-xl flex-shrink-0" />
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 skeleton rounded-full" style={{ width: `${w * 0.4}%` }} />
+                            <div className="h-4 skeleton rounded-full" style={{ width: `${w}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : candidate ? (
+                    <div className="p-6 space-y-4 animate-fade-up">
+                      {/* Header */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/25 flex-shrink-0">
+                            {candidate.name ? candidate.name.charAt(0).toUpperCase() : '?'}
+                          </div>
+                          <div>
+                            <p className="text-lg font-bold text-white">{candidate.name || 'Unknown'}</p>
+                            <p className="text-sm text-indigo-400 font-medium">{candidate.currentJobTitle || 'Candidate'}</p>
+                            <p className="text-xs text-slate-500 mt-0.5">{candidate.email || '—'}</p>
+                          </div>
+                        </div>
+                        <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full flex-shrink-0 ${
+                          candidate.status === 'SUCCESS'
+                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
+                            : 'bg-red-500/15 text-red-400 border border-red-500/20'
+                        }`}>{candidate.status || 'PARSED'}</span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/[0.06]">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Phone</p>
+                          <p className="text-sm font-semibold text-slate-200">{candidate.phone || '—'}</p>
+                        </div>
+                        <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/[0.06]">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Experience</p>
+                          <p className="text-sm font-semibold text-slate-200">{candidate.experienceYears != null ? `${candidate.experienceYears} yrs` : '—'}</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/[0.06]">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Education</p>
+                        <p className="text-sm font-semibold text-slate-200">{candidate.education || 'Not specified'}</p>
+                      </div>
+
+                      {candidate.summary && (
+                        <div className="bg-indigo-500/[0.06] rounded-2xl p-4 border border-indigo-500/15">
+                          <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-2">Summary</p>
+                          <p className="text-sm text-slate-300 leading-relaxed italic">"{candidate.summary}"</p>
+                        </div>
+                      )}
+
+                      <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/[0.06]">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Skills</p>
+                        {candidate.skills && candidate.skills.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {candidate.skills.map((skill, idx) => (
+                              <span key={idx}
+                                className="px-2.5 py-1 bg-white/[0.05] text-slate-300 text-xs font-semibold rounded-lg border border-white/[0.08] hover:bg-indigo-500/10 hover:border-indigo-500/20 hover:text-indigo-300 transition-all cursor-default">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-slate-500 italic">No skills detected</p>
+                        )}
+                      </div>
+
+                      <button onClick={() => { handleReset(); setTimeout(() => fileInputRef.current?.click(), 100); }}
+                        className="w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-bold shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02]">
+                        + Upload Another Resume
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="p-10 text-center text-slate-500">
+                      <p className="text-sm">AI extraction pending…</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* RIGHT: PDF Preview */}
+              <div className="flex flex-col">
+                <div className="glass rounded-3xl border border-white/[0.08] overflow-hidden flex-1 flex flex-col">
+                  <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Resume Preview</span>
+                    </div>
+                    <a href={previewUrl} target="_blank" rel="noopener noreferrer"
+                      className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
+                      Full screen
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                  <div className="flex-1 min-h-[620px] bg-[#080c18] flex flex-col">
+                    <ResumePreview url={previewUrl} skills={candidate?.skills || []} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Empty hint */}
+          {!previewUrl && !isLoading && batchItems.length === 0 && (
+            <div className="max-w-2xl mx-auto mt-2 text-center animate-fade-up delay-400">
+              <p className="text-xs text-slate-600">Supports PDF · Single or batch · Up to 5 processed simultaneously</p>
+            </div>
+          )}
+
+        </main>
+      )}
+    </div>
+  )
+}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-3">
