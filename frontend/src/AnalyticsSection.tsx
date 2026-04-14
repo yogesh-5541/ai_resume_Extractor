@@ -42,7 +42,7 @@ function StatCard({ title, value, suffix = '', icon, gradient, delay = 0 }: {
   const count = useCountUp(value);
   return (
     <div className="stat-card animate-fade-up relative overflow-hidden rounded-2xl p-5 border border-white/[0.07] cursor-pointer card-glow"
-      style={{ animationDelay: `${delay}ms`, background: gradient }}>
+      style={{ animationDelay: `${delay}ms`, animationFillMode: 'both', animationIterationCount: 1, background: gradient }}>
       <div className="absolute top-0 right-0 w-28 h-28 rounded-full bg-white/[0.04] -mr-10 -mt-10 pointer-events-none" />
       <div className="relative z-10 flex items-start justify-between">
         <div>
@@ -67,7 +67,7 @@ function HBar({ label, value, max, pct, color, rank, delay = 0 }: {
   }, [value, max, delay]);
 
   return (
-    <div className="group flex items-center gap-3 animate-fade-up" style={{ animationDelay: `${delay}ms` }}>
+    <div className="group flex items-center gap-3" style={{ animationDelay: `${delay}ms` }}>
       {rank !== undefined && (
         <span className="w-5 text-xs font-bold text-slate-500 text-right shrink-0">#{rank}</span>
       )}
@@ -160,12 +160,14 @@ function SkillCloud({ skills }: { skills: [string, number][] }) {
         const ci = i % colors.length;
         return (
           <span key={skill}
-            className="px-3 py-1.5 rounded-xl font-semibold border transition-all hover:scale-105 cursor-default animate-fade-up"
+            className="px-3 py-1.5 rounded-xl font-semibold border cursor-default"
             style={{
               fontSize: `${Math.max(10, Math.min(14, 10 + scale * 4))}px`,
               background: colors[ci], borderColor: borders[ci], color: textColors[ci],
-              animationDelay: `${i * 40}ms`,
-            }}>
+              transition: 'transform 0.15s ease, opacity 0.15s ease',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
+            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}>
             {skill}
             <span className="ml-1.5 text-[9px] opacity-60 font-bold">{count}</span>
           </span>
@@ -227,7 +229,7 @@ function Timeline({ candidates }: { candidates: ResumeData[] }) {
         const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         const mName = monthNames[parseInt(label) - 1];
         return (
-          <div key={month} className="flex-1 flex flex-col items-center gap-1 group animate-fade-up"
+          <div key={month} className="flex-1 flex flex-col items-center gap-1 group"
             style={{ animationDelay: `${i * 80}ms` }}>
             <span className="text-[9px] font-bold text-slate-500 group-hover:text-indigo-400 transition-colors">{count}</span>
             <div className="w-full rounded-t-lg transition-all duration-700 ease-out group-hover:opacity-80 relative overflow-hidden"
@@ -542,7 +544,7 @@ export default function AnalyticsSection() {
             <tbody>
               {[...candidates].reverse().slice(0, 8).map((c, i) => (
                 <tr key={c.id}
-                  className="border-b border-white/[0.03] hover:bg-white/[0.03] transition-colors animate-fade-up"
+                  className="border-b border-white/[0.03] hover:bg-white/[0.03] transition-colors"
                   style={{ animationDelay: `${i * 50}ms` }}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
