@@ -12,13 +12,27 @@ public class Resume {
     @Column(columnDefinition = "LONGTEXT")
     private String originalText;
 
+    @Column(length = 512)
     private String applicantName;
+
+    @Column(length = 512)
     private String email;
+
+    @Column(length = 100)
     private String phone;
+
+    @Column(columnDefinition = "TEXT")
     private String skills;
+
     private Double experienceYears;
+
+    @Column(length = 50)
     private String status;
+
+    @Column(columnDefinition = "TEXT")
     private String education;
+
+    @Column(length = 512)
     private String currentJobTitle;
     
     @Column(columnDefinition = "TEXT")
